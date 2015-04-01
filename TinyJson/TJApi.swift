@@ -28,6 +28,7 @@ public class TJAPI {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if(request.method == .POST || request.method == .PUT) {
+            req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             req.HTTPBody = mutableParams?.urlEncodedString().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         }
         
@@ -42,29 +43,42 @@ public class TJAPI {
                 if serializeError == nil {
                     
                     let object: T = request.mapper(obj)
-                    
+                                        
                     let httpRes = response as NSHTTPURLResponse
                     
                     if httpRes.statusCode >= 200 && httpRes.statusCode < 300 {
                         
                         cache?.save(request, params: params, object: object)
-                        request.completionHandler?(object)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            request.completionHandler?(object)
+                            return
+                        })
+                        
                     } else {
                         
                         // Http status error
-                        request.errorHandler?(obj, error)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            request.errorHandler?(obj, error)
+                            return
+                        });
                     }
                     
                 } else {
                     
                     // NSJSONSerialization error
-                    request.errorHandler?(obj, serializeError!)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        request.errorHandler?(nil, serializeError!)
+                        return
+                    });
                 }
                 
             } else {
                 
                 // Request error
-                request.errorHandler?(obj, error)
+                dispatch_async(dispatch_get_main_queue(), {
+                    request.errorHandler?(obj, error)
+                    return
+                });
             }
         }
         
