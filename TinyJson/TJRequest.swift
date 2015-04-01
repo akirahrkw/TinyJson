@@ -28,11 +28,11 @@ public class TJRequest<T>: NSObject {
 
     var method: TJHttpMethod
     var url: String
-    var mapper: (Dictionary<String, AnyObject>) -> T
+    var mapper: AnyObject -> T
     var completionHandler: ((T) -> ())?
-    var errorHandler: ((Dictionary<String, AnyObject>, NSError) -> ())?
+    var errorHandler: ((AnyObject?, NSError) -> ())?
 
-    public init(url: String, method: TJHttpMethod, jsonMapper: (Dictionary<String, AnyObject>) -> T, completionHandler: (T) -> (), errorHandler: ((Dictionary<String, AnyObject>, NSError) -> ())?) {
+    public init(url: String, method: TJHttpMethod, jsonMapper: AnyObject -> T, completionHandler: (T) -> (), errorHandler: ((AnyObject?, NSError) -> ())?) {
         
         self.url = url
         self.method = method
@@ -41,7 +41,7 @@ public class TJRequest<T>: NSObject {
         self.errorHandler = errorHandler
     }
     
-    public convenience init(url: String, method: TJHttpMethod, jsonMapper: (Dictionary<String, AnyObject>) -> T, completionHandler: (T) -> ()){
+    public convenience init(url: String, method: TJHttpMethod, jsonMapper: AnyObject -> T, completionHandler: T -> ()){
         
         self.init(url: url, method: method, jsonMapper: jsonMapper, completionHandler: completionHandler, errorHandler: nil)
     }
