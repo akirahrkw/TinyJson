@@ -36,13 +36,13 @@ public class TJAPI {
         var closure = { (data:NSData!, response:NSURLResponse!, error:NSError!) -> () in
             
             var serializeError: NSError?;
-            let obj = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: nil) as Dictionary<String, AnyObject>
+            let obj = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &serializeError) as? Dictionary<String, AnyObject>
             
             if error == nil {
                 
                 if serializeError == nil {
                     
-                    let object: T = request.mapper(obj)
+                    let object: T = request.mapper(obj!)
                                         
                     let httpRes = response as NSHTTPURLResponse
                     
