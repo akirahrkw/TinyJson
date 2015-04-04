@@ -50,7 +50,7 @@ public class TJAPI {
                         
                         cache?.save(request, params: params, object: object)
                         dispatch_async(dispatch_get_main_queue(), {
-                            request.completionHandler?(object)
+                            request.completionHandler?(object, params:params)
                             return
                         })
                         
