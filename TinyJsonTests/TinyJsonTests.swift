@@ -18,22 +18,25 @@ class TinyJsonTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-
     }
     
     override func tearDown() {
-
         super.tearDown()
     }
     
-    func testCall() {
+    func testPerformanceExample() {
+        self.measureBlock() {
+            self.mediaAPI()
+        }
+    }
+    
+    func mediaAPI() {
         
-        var mapper = { (json: Dictionary<String, AnyObject>) -> [Media] in
+        //// Object Mapper
+        var mapper = { (json: AnyObject) -> [Media] in
             
             var result = [Media]()
-            
             var list = json["data"] as NSArray
-            
             var array = list as NSArray
             
             for dic in array {
@@ -43,32 +46,22 @@ class TinyJsonTests: XCTestCase {
                 
                 result.append(obj)
             }
-            
+           
             return result
         }
         
-        var handler = { (array: [Media]) -> () in
+        /// completionHandler
+        var handler = { (array: [Media], params: [String: AnyObject]?) -> () in
+            
             for val in array {
-                println(val)
+                println(val.caption)
             }
         }
-        
-        var params = [String: AnyObject]()
-        params["id"] = 12
-        params["title"] = "test"
         
         var url = "http://eli.lvh.me:8000/api/media"
         var request = TJRequest<[Media]>(url: url, method: .GET, jsonMapper: mapper, completionHandler: handler)
         
-        var cached = TJAPI.call(request, params: params)
-        println(cached)
+        TJAPI.call(request, params: nil)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+
 }
