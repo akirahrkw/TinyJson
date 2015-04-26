@@ -36,7 +36,7 @@ class TinyJsonTests: XCTestCase {
         var mapper = { (json: AnyObject) -> [Media] in
             
             var result = [Media]()
-            var list = json["data"] as NSArray
+            var list = json["data"] as! NSArray
             var array = list as NSArray
             
             for dic in array {

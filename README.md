@@ -2,6 +2,10 @@
 
 TinyJson is simple json api library for ios, written by swift
 
+## Swift Version
+
+This branch supports swift 1.2
+
 ## Usage
 
 you have to define

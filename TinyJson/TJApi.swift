@@ -44,7 +44,7 @@ public class TJAPI {
                     
                     let object: T = request.mapper(obj!)
                                         
-                    let httpRes = response as NSHTTPURLResponse
+                    let httpRes = response as! NSHTTPURLResponse
                     
                     if httpRes.statusCode >= 200 && httpRes.statusCode < 300 {
                         
